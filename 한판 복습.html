@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>한판 복습</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f4ef; --card:#fff; --ink:#1d1b18; --sub:#6b665d; --line:#e6e1d6;
+  --accent:#2f5d50; --accent-2:#e8f0ec; --hl:#fff1a8; --ok:#2e7d4f; --ok-bg:#e7f5ec;
+  --bad:#c0392b; --bad-bg:#fbeaea; --warn:#b26b00; --warn-bg:#fff4e0;
+  --r:16px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans KR",system-ui,sans-serif;font-size:16px;line-height:1.55}
+body{padding:env(safe-area-inset-top) env(safe-area-inset-right) 0 env(safe-area-inset-left)}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer;border:none;background:none}
+.wrap{max-width:680px;margin:0 auto;padding:16px 16px calc(96px + env(safe-area-inset-bottom))}
+header.top{display:flex;align-items:center;justify-content:space-between;margin:4px 0 16px}
+.logo{font-weight:900;font-size:22px;letter-spacing:-.5px}
+.logo span{background:linear-gradient(transparent 60%,var(--hl) 60%);padding:0 2px}
+.store-tag{font-size:12px;color:var(--sub)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:14px}
+h2{font-size:18px;margin:0 0 10px;letter-spacing:-.3px}
+h3{font-size:15px;margin:0 0 8px}
+.label{font-size:13px;font-weight:700;color:var(--sub);margin:14px 0 8px}
+.label:first-child{margin-top:0}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:7px 13px;border-radius:999px;border:1px solid var(--line);background:#fff;font-size:14px}
+.chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+textarea{width:100%;min-height:150px;border:1px solid var(--line);border-radius:12px;padding:12px;resize:vertical;background:#fcfbf8;font-size:15px}
+textarea:focus,input:focus{outline:2px solid var(--accent);outline-offset:-1px}
+.photos{display:flex;flex-wrap:wrap;gap:8px}
+.ph{position:relative;width:76px;height:76px;border-radius:10px;overflow:hidden;border:1px solid var(--line)}
+.ph img{width:100%;height:100%;object-fit:cover}
+.ph button{position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;font-size:13px;line-height:22px}
+.addph{width:76px;height:76px;border-radius:10px;border:1.5px dashed #bdb6a8;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:12px;color:var(--sub);gap:2px}
+.addph b{font-size:22px;line-height:1;color:var(--accent)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:12px 16px;border-radius:12px;font-weight:700;font-size:15px}
+.btn.primary{background:var(--accent);color:#fff;width:100%;padding:15px;font-size:16px}
+.btn.primary:disabled{opacity:.45}
+.btn.ghost{background:var(--accent-2);color:var(--accent)}
+.btn.line{border:1px solid var(--line);background:#fff}
+.btn.danger{color:var(--bad);border:1px solid #efcdc9;background:#fff}
+.btn.sm{padding:8px 12px;font-size:13px;border-radius:10px}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.muted{color:var(--sub);font-size:14px}
+.err{background:var(--bad-bg);color:var(--bad);padding:12px;border-radius:12px;font-size:14px;margin-top:12px}
+.notice{background:var(--warn-bg);color:var(--warn);padding:12px;border-radius:12px;font-size:14px;margin-bottom:14px}
+
+/* progress */
+.prog{text-align:center;padding:30px 16px}
+.spinner{width:40px;height:40px;border:4px solid var(--accent-2);border-top-color:var(--accent);border-radius:50%;margin:0 auto 14px;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.steps{display:flex;justify-content:center;gap:6px;margin:12px 0;font-size:13px}
+.steps span{padding:4px 10px;border-radius:999px;background:#eee;color:#999}
+.steps span.on{background:var(--accent-2);color:var(--accent);font-weight:700}
+.steps span.done{background:var(--accent);color:#fff}
+
+/* sheet */
+.sheet-title{font-size:21px;font-weight:900;letter-spacing:-.5px;margin:0 0 4px}
+.sheet-sub{font-size:13px;color:var(--sub);margin-bottom:12px}
+.overview{background:var(--accent-2);border-left:4px solid var(--accent);padding:10px 12px;border-radius:8px;font-weight:500;margin-bottom:14px}
+.sec{margin-bottom:14px}
+.sec h3{display:flex;gap:8px;align-items:center}
+.sec h3 i{font-style:normal;background:var(--accent);color:#fff;width:22px;height:22px;border-radius:6px;font-size:12px;display:inline-flex;align-items:center;justify-content:center;flex:none}
+ul.pts{margin:0;padding-left:20px}
+ul.pts li{margin:3px 0}
+b,strong{background:linear-gradient(transparent 62%,var(--hl) 62%);font-weight:700}
+.terms{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:14px}
+.terms dt{font-weight:700}
+.terms dd{margin:0;color:#3c3934}
+.box{border-radius:12px;padding:12px 14px;margin-top:12px}
+.box.exam{background:#eef4ff}
+.box.exam h3{color:#2850a8}
+.box.trap{background:var(--bad-bg)}
+.box.trap h3{color:var(--bad)}
+
+/* tabs */
+.seg{display:flex;background:#ebe7de;border-radius:12px;padding:4px;margin-bottom:14px;position:sticky;top:6px;z-index:5}
+.seg button{flex:1;padding:9px;border-radius:9px;font-weight:700;font-size:14px;color:var(--sub)}
+.seg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+
+/* quiz */
+.q{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:12px}
+.qhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.qnum{font-weight:900;color:var(--accent)}
+.qtype{font-size:12px;color:var(--sub);background:#f1eee7;padding:2px 8px;border-radius:999px}
+.qtext{font-weight:500;margin-bottom:12px;white-space:pre-wrap}
+.ch{display:flex;gap:10px;width:100%;text-align:left;padding:10px 12px;border:1px solid var(--line);border-radius:10px;margin-bottom:7px;background:#fff;font-size:15px}
+.ch .n{flex:none;width:22px;height:22px;border-radius:50%;border:1.5px solid #c9c2b4;font-size:12px;display:inline-flex;align-items:center;justify-content:center;margin-top:1px}
+.ch.ok{border-color:var(--ok);background:var(--ok-bg)}
+.ch.ok .n{background:var(--ok);border-color:var(--ok);color:#fff}
+.ch.bad{border-color:var(--bad);background:var(--bad-bg)}
+.ch.bad .n{background:var(--bad);border-color:var(--bad);color:#fff}
+.ox{display:flex;gap:10px}
+.ox button{flex:1;font-size:26px;font-weight:900;padding:12px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.ox button.ok{border-color:var(--ok);background:var(--ok-bg);color:var(--ok)}
+.ox button.bad{border-color:var(--bad);background:var(--bad-bg);color:var(--bad)}
+.short input{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;margin-bottom:8px;background:#fcfbf8}
+.exp{margin-top:10px;padding:12px;border-radius:10px;font-size:14px}
+.exp.ok{background:var(--ok-bg)}
+.exp.bad{background:var(--bad-bg)}
+.exp .verdict{font-weight:900;margin-bottom:4px}
+.exp.ok .verdict{color:var(--ok)}
+.exp.bad .verdict{color:var(--bad)}
+.score{display:flex;justify-content:space-between;align-items:center;font-size:14px;margin-bottom:12px}
+.score b{background:none;font-size:18px}
+.from{font-size:12px;color:var(--sub);margin-bottom:6px}
+
+/* list */
+.note-item{display:block;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;margin-bottom:10px}
+.note-item .t{font-weight:700}
+.note-item .m{font-size:13px;color:var(--sub);margin-top:2px}
+.badge{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--accent-2);color:var(--accent);margin-right:6px}
+.badge.red{background:var(--bad-bg);color:var(--bad)}
+.empty{text-align:center;padding:40px 20px;color:var(--sub)}
+.empty .big{font-size:40px;margin-bottom:8px}
+
+/* bottom nav */
+nav.bottom{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border-top:1px solid var(--line);display:flex;justify-content:center;padding-bottom:env(safe-area-inset-bottom);z-index:10}
+nav.bottom .in{display:flex;max-width:680px;width:100%}
+nav.bottom button{flex:1;padding:10px 0 9px;font-size:12px;color:var(--sub);display:flex;flex-direction:column;align-items:center;gap:2px}
+nav.bottom button .ic{font-size:20px;line-height:1}
+nav.bottom button.on{color:var(--accent);font-weight:700}
+.back{font-size:14px;color:var(--sub);margin-bottom:10px;display:inline-flex;gap:4px;padding:4px 0}
+.toast{position:fixed;left:50%;bottom:calc(80px + env(safe-area-inset-bottom));transform:translateX(-50%);background:#222;color:#fff;padding:10px 16px;border-radius:999px;font-size:14px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:20}
+.toast.show{opacity:1}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="logo"><span>한판</span> 복습</div>
+    <div class="store-tag" id="storeTag"></div>
+  </header>
+  <div id="noAi" class="notice hidden">이 화면에서는 AI 기능을 쓸 수 없어요. claude.ai 또는 Claude 앱에서 이 페이지를 열어주세요.</div>
+  <main id="main"></main>
+</div>
+<nav class="bottom"><div class="in">
+  <button data-nav="new" class="on"><span class="ic">✏️</span>새로 만들기</button>
+  <button data-nav="list"><span class="ic">📚</span>내 노트</button>
+  <button data-nav="wrong"><span class="ic">❗</span>오답노트</button>
+  <button data-nav="style"><span class="ic">🏫</span>학교 경향</button>
+</div></nav>
+<input type="file" id="fileIn" accept="image/*" multiple class="hidden">
+<div class="toast" id="toast"></div>
+
+<script>
+/* ---------- state ---------- */
+const SUBJECTS=["국어","수학","영어","한국사","사회","과학","기타"];
+const LEVELS={basic:"기본 (개념 확인)",real:"실전 (내신 평균)",hard:"심화 (고난도)"};
+const TYPES={mc:"객관식",ox:"O/X",short:"단답형",essay:"서술형"};
+const S={
+  sample:null, imagesOk:false, db:null, uid:null,
+  notes:[], view:"new", noteId:null, noteTab:"sheet", onlyWrong:false,
+  form:{subject:"국어", text:"", imgs:[], count:8, level:"real", types:["mc","ox","short"], useStyle:true},
+  styles:{}, sform:{subject:"국어", text:"", imgs:[]}, imgTarget:"form",
+  busy:null, answers:{}, wrongAnswers:{}, delArm:false, err:""
+};
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt=s=>esc(s).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>");
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show"),1800)}
+
+/* ---------- storage ---------- */
+const LS="hanpan_notes_v1";
+function lsLoad(){try{S.styles=JSON.parse(localStorage.getItem("hanpan_styles_v1")||"{}")}catch{S.styles={}}try{return JSON.parse(localStorage.getItem(LS)||"[]")}catch{return[]}}
+function lsSave(){try{localStorage.setItem(LS,JSON.stringify(S.notes))}catch{}}
+const writeQ={};
+function saveNote(note){
+  const i=S.notes.findIndex(n=>n.id===note.id);
+  if(i>=0)S.notes[i]=note;else S.notes.unshift(note);
+  if(!S.db){lsSave();return Promise.resolve()}
+  const {id,...body}=JSON.parse(JSON.stringify(note));
+  const prev=writeQ[id]||Promise.resolve();
+  writeQ[id]=prev.then(()=>S.db.collection("data/users/"+S.uid).doc(id).set(body)).catch(e=>{
+    toast(e&&e.code==="quota_exceeded"?"저장 공간이 꽉 찼어요. 노트를 몇 개 지워주세요.":"저장에 실패했어요");
+  });
+  return writeQ[id];
+}
+const LS_ST="hanpan_styles_v1";
+let stQ=Promise.resolve();
+function saveStyles(){
+  if(!S.db){try{localStorage.setItem(LS_ST,JSON.stringify(S.styles))}catch{};return Promise.resolve()}
+  const body=JSON.parse(JSON.stringify({kind:"styles",createdAt:0,map:S.styles}));
+  stQ=stQ.then(()=>S.db.collection("data/users/"+S.uid).doc("_styles").set(body)).catch(()=>toast("경향 저장에 실패했어요"));
+  return stQ;
+}
+function deleteNote(id){
+  S.notes=S.notes.filter(n=>n.id!==id);
+  if(!S.db){lsSave();return}
+  S.db.collection("data/users/"+S.uid).doc(id).delete().catch(()=>toast("삭제에 실패했어요"));
+}
+async function initStore(){
+  const c=window.claude;
+  if(!c||!c.use){S.notes=lsLoad();setTag();render();return}
+  try{
+    const [db,user]=await Promise.all([c.use("db"),c.use("user")]);
+    const id=user?await user.id():null;
+    if(db&&id){
+      S.db=db;S.uid=id;
+      let timer=setTimeout(()=>{$("#storeTag").textContent="불러오는 중…(연결 지연)"},10000);
+      db.collection("data/users/"+id).orderBy("createdAt","desc").onSnapshot(snap=>{
+        if(!snap.metadata.fromCache){clearTimeout(timer)}
+        const all=snap.docs.map(d=>({id:d.id,...JSON.parse(JSON.stringify(d.data()))}));
+        const st=all.find(d=>d.id==="_styles");S.styles=(st&&st.map)||{};
+        S.notes=all.filter(d=>d.id!=="_styles"&&d.kind!=="styles");
+        setTag();
+        if(!S.busy&&(S.view!=="new"||!S._first))render();S._first=true;
+      },e=>{clearTimeout(timer);S.db=null;S.notes=lsLoad();setTag();render()});
+    }else{S.notes=lsLoad()}
+  }catch{S.notes=lsLoad()}
+  setTag();render();
+}
+function setTag(){$("#storeTag").textContent=S.db?"☁️ 계정에 저장":"📱 이 기기에 저장"}
+async function initAI(){
+  const c=window.claude;
+  if(!c||!c.use){$("#noAi").classList.remove("hidden");return}
+  try{
+    S.sample=await c.use("sample");
+    if(S.sample&&S.sample.limits){try{S.imagesOk=!!(await S.sample.limits()).images}catch{}}
+  }catch{}
+  if(!S.sample)$("#noAi").classList.remove("hidden");
+  if(S.view==="new"&&!S.busy)render();
+}
+
+/* ---------- images ---------- */
+function shrink(file){
+  return new Promise((res,rej)=>{
+    const url=URL.createObjectURL(file);const img=new Image();
+    img.onload=()=>{
+      const M=1568;let {width:w,height:h}=img;const k=Math.min(1,M/Math.max(w,h));w=Math.round(w*k);h=Math.round(h*k);
+      const cv=document.createElement("canvas");cv.width=w;cv.height=h;cv.getContext("2d").drawImage(img,0,0,w,h);
+      cv.toBlob(b=>{URL.revokeObjectURL(url);b?res({blob:b,url:URL.createObjectURL(b)}):rej()},"image/jpeg",.85);
+    };
+    img.onerror=()=>{URL.revokeObjectURL(url);rej()};img.src=url;
+  });
+}
+$("#fileIn").addEventListener("change",async e=>{
+  const tgt=S.imgTarget==="style"?S.sform:S.form;const max=S.imgTarget==="style"?8:6;
+  const files=[...e.target.files].slice(0,Math.max(0,max-tgt.imgs.length));
+  for(const f of files){try{tgt.imgs.push(await shrink(f))}catch{toast("사진을 읽지 못했어요")}}
+  e.target.value="";render();
+});
+
+/* ---------- AI ---------- */
+function parseJSON(t){
+  t=t.replace(/```json|```/g,"");const a=t.indexOf("{"),b=t.lastIndexOf("}");
+  if(a<0||b<0)throw new Error("형식 오류");return JSON.parse(t.slice(a,b+1));
+}
+async function ask(prompt,opts={}){
+  const ctrl=new AbortController();S.busy.ctrl=ctrl;
+  const r=await S.sample(prompt,{signal:ctrl.signal,modelTier:"default",onText:({text})=>{
+    const el=$("#progN");if(el)el.textContent=text&&text!=="Thinking..."?`${text.length.toLocaleString()}자 작성 중…`:"자료 읽는 중…";
+  },...opts});
+  return parseJSON(r.text);
+}
+function sheetPrompt(subject,text,nImg){
+return `너는 한국 고등학생의 기말고사 대비를 돕는 ${subject} 선생님이야. 아래 학습 자료${nImg?`(텍스트와 사진 ${nImg}장)`:""}를 읽고 '한판정리'(시험 직전에 보는 한 페이지 요약)를 만들어.
+
+규칙:
+- 자료에 있는 내용 중심. 시험에 나올 핵심만 압축. 자료에 없는 내용을 지어내지 말 것(꼭 필요한 보충 설명만 짧게).
+- 한국어, 개조식 짧은 문장. 핵심 단어는 **굵게** 표시.
+- 수식은 LaTeX 금지, 일반 텍스트로(x², √2, sin θ, ≤, → 등).
+- 사진 글씨가 흐리면 읽을 수 있는 범위만 정리.
+- sections는 3~6개, 각 points 2~6개.
+- sourceText: 자료(사진 속 글 포함)의 핵심 내용을 최대 3000자로 충실히 옮겨 적기. 나중에 문제를 만들 때 원문 대신 쓰인다.
+
+JSON만 출력(설명 문장, 코드블록 없이):
+{"title":"단원/주제 이름(20자 이내)","overview":"전체 핵심 한 문장","sections":[{"heading":"소제목","points":["..."]}],"keyTerms":[{"term":"용어","meaning":"뜻(한 줄)"}],"examPoints":["시험에 나올 포인트"],"traps":["헷갈리기 쉬운 것·자주 틀리는 것"],"sourceText":"..."}
+
+[자료 텍스트]
+${text||"(텍스트 없음 — 사진만 참고)"}`;
+}
+function stylePrompt(subject,text,nImg,prev){
+return `아래는 한국 고등학교 ${subject} 학교 시험지(기출)${nImg?` 사진 ${nImg}장`:""}${text?"와 텍스트":""}야. 이 학교 선생님의 출제 경향을 분석해서, 나중에 변형 문제를 만들 때 따라 할 '출제 스타일 가이드'를 만들어.
+
+분석할 것:
+- 문제 유형 비율(객관식/서술형/단답형 등), 배점 경향이 보이면 함께
+- 자주 쓰는 발문 형식(예: "<보기>에서 옳은 것만 있는 대로 고른 것은?", "밑줄 친 ㉠~㉤ 중 적절하지 않은 것은?")
+- 선지 스타일(선지 길이, ㄱ·ㄴ·ㄷ 조합형, 지문/자료 제시 방식 등)
+- 난이도 특징과 함정 패턴(어디서 학생을 헷갈리게 하는지)
+- 서술형 조건(글자 수, 반드시 포함할 단어 등)
+- 시험지 원문 문장을 그대로 길게 옮기지 말고 '형식'만 정리할 것.
+${prev?`\n[기존 분석 — 새 시험지 내용과 합쳐서 더 정확하게 업데이트할 것]\n${JSON.stringify(prev)}\n`:""}
+JSON만 출력(설명 문장, 코드블록 없이):
+{"summary":"경향 요약 2~3문장","typeRatio":"유형 비율","patterns":["자주 나오는 발문/문제 형식"],"choiceStyle":"선지·자료 제시 스타일","difficulty":"난이도·함정 특징","essay":"서술형 특징(없으면 빈 문자열)","tips":["이 학교 시험 대비 전략"]}
+
+[시험지 텍스트]
+${text||"(텍스트 없음 — 사진 참고)"}`;
+}
+function styleText(st){
+  return [`요약: ${st.summary}`,`유형 비율: ${st.typeRatio}`,`발문 형식:\n- ${(st.patterns||[]).join("\n- ")}`,
+    `선지·자료 스타일: ${st.choiceStyle}`,`난이도·함정: ${st.difficulty}`,st.essay?`서술형: ${st.essay}`:""].filter(Boolean).join("\n");
+}
+async function analyzeStyle(){
+  const f=S.sform;
+  if(!S.sample){toast("AI를 쓸 수 없는 화면이에요");return}
+  if(!f.text.trim()&&!f.imgs.length){toast("시험지 사진이나 텍스트를 넣어주세요");return}
+  S.err="";S.busy={step:0,style:true};render();
+  try{
+    const imgs=f.imgs.map(i=>i.blob);const prev=S.styles[f.subject];
+    const r=await ask(stylePrompt(f.subject,f.text.trim(),imgs.length,prev?{...prev,updatedAt:undefined,exams:undefined}:null),imgs.length?{images:imgs}:{});
+    S.styles[f.subject]={summary:String(r.summary||""),typeRatio:String(r.typeRatio||""),patterns:(r.patterns||[]).map(String),
+      choiceStyle:String(r.choiceStyle||""),difficulty:String(r.difficulty||""),essay:String(r.essay||""),tips:(r.tips||[]).map(String),
+      updatedAt:Date.now(),exams:((prev&&prev.exams)||0)+1};
+    await saveStyles();
+    f.text="";f.imgs.forEach(i=>URL.revokeObjectURL(i.url));f.imgs=[];
+    S.busy=null;render();window.scrollTo(0,0);toast("출제 경향을 저장했어요");
+  }catch(e){S.busy=null;S.err=aiErr(e);render()}
+}
+function qPrompt(note,count,level,types,existing){
+  const s=note.sheet;
+  const st=S.form.useStyle?S.styles[note.subject]:null;
+  const sheetTxt=[s.overview,...(s.sections||[]).map(x=>"■ "+x.heading+"\n- "+(x.points||[]).join("\n- ")),
+    "용어: "+(s.keyTerms||[]).map(k=>k.term+"="+k.meaning).join("; "),
+    "시험 포인트: "+(s.examPoints||[]).join(" / "),"함정: "+(s.traps||[]).join(" / ")].join("\n");
+return `너는 한국 고등학교 ${note.subject} 내신 출제 선생님이야. 아래 학습 자료로 기말고사 대비 '변형 문제' ${count}개를 만들어.
+난이도: ${LEVELS[level]}
+유형: ${types.map(t=>TYPES[t]).join(", ")} 중에서 골고루 섞기
+
+규칙:
+- 자료 문장을 그대로 묻지 말고 변형할 것: 표현 바꾸기, 조건·상황·숫자 바꾸기, 개념을 새 예시에 적용, 옳은/옳지 않은 것 고르기 등.
+- 정답이 자료 내용으로 확실히 판단 가능하고, 정답은 딱 하나.
+- 객관식(type "mc"): 보기 5개, 그럴듯한 오답 포함. answer는 정답 보기의 번호(0부터 시작하는 정수). 보기에 ①② 같은 번호 붙이지 말 것.
+- O/X(type "ox"): answer는 "O" 또는 "X".
+- 단답형(type "short"): answer는 짧은 모범답(단어나 짧은 구). choices는 빈 배열.
+- 서술형(type "essay"): 조건이 있는 서술형. answer는 모범답안(채점 기준 핵심어 포함). choices는 빈 배열.
+- <보기>나 ㄱ·ㄴ·ㄷ, 제시문이 필요하면 q 안에 줄바꿈(\\n)으로 넣기.
+- explanation: 왜 정답인지 + 헷갈리는 포인트를 2~3문장으로.
+- 수식은 LaTeX 금지, 일반 텍스트로.
+${st?`- 아래 '우리 학교 출제 스타일'을 최우선으로 따를 것: 발문 형식, 선지·자료 제시 방식, 함정 패턴, 난이도 감각을 그대로 흉내 내서 실제 이 학교 시험에 나올 것 같은 문제로. 유형 비율도 가능한 범위에서 맞추기.
+
+[우리 학교 출제 스타일]
+${styleText(st)}
+`:""}${existing.length?`- 이미 낸 문제와 겹치지 않게(다른 개념·다른 각도로):\n${existing.map((q,i)=>`  ${i+1}. ${q}`).join("\n")}`:""}
+
+JSON만 출력(설명 문장, 코드블록 없이):
+{"questions":[{"type":"mc","q":"문제","choices":["","","","",""],"answer":0,"explanation":""}]}
+
+[한판정리]
+${sheetTxt}
+
+[자료 원문]
+${note.source||""}`;
+}
+function cleanQs(arr,allowed){
+  return (arr||[]).filter(q=>q&&q.q&&allowed.includes(q.type)).map(q=>{
+    const o={id:uid(),type:q.type,q:String(q.q),explanation:String(q.explanation||"")};
+    if(q.type==="mc"){o.choices=(q.choices||[]).map(String).slice(0,5);o.answer=Number(q.answer);if(!(o.answer>=0&&o.answer<o.choices.length))return null}
+    else if(q.type==="ox"){o.answer=String(q.answer).toUpperCase().includes("X")?"X":"O"}
+    else{o.answer=String(q.answer||"");if(!o.answer)return null}
+    return o;
+  }).filter(Boolean);
+}
+function aiErr(e){
+  if(e&&e.name==="AbortError")return "";
+  if(e&&e.code==="not_granted")return "AI 사용이 허용되지 않았어요. 다시 눌러서 허용해 주세요.";
+  if(e&&e.code==="rate_limited")return "요청이 많아요. 잠시 후 다시 시도해 주세요.";
+  if(e&&e.message==="형식 오류"||e instanceof SyntaxError)return "결과를 읽지 못했어요. 한 번 더 시도해 주세요.";
+  return "만들기에 실패했어요. "+(e&&e.message?e.message:"잠시 후 다시 시도해 주세요.");
+}
+async function generate(){
+  const f=S.form;
+  if(!S.sample){toast("AI를 쓸 수 없는 화면이에요");return}
+  if(!f.text.trim()&&!f.imgs.length){toast("텍스트나 사진을 넣어주세요");return}
+  S.err="";S.busy={step:1};render();
+  try{
+    const imgs=f.imgs.map(i=>i.blob);
+    const sh=await ask(sheetPrompt(f.subject,f.text.trim(),imgs.length),imgs.length?{images:imgs}:{});
+    const note={id:uid(),subject:f.subject,createdAt:Date.now(),title:String(sh.title||"제목 없음"),
+      sheet:{overview:sh.overview||"",sections:sh.sections||[],keyTerms:sh.keyTerms||[],examPoints:sh.examPoints||[],traps:sh.traps||[]},
+      source:String(sh.sourceText||f.text||"").slice(0,6000),questions:[],wrong:[],level:f.level,types:[...f.types]};
+    S.busy.step=2;render();
+    let qs=[];
+    try{const r=await ask(qPrompt(note,f.count,f.level,f.types,[]));qs=cleanQs(r.questions,f.types)}
+    catch(e){if(e&&e.name==="AbortError")throw e;toast("문제는 노트에서 다시 만들 수 있어요")}
+    note.questions=qs;
+    await saveNote(note);
+    f.text="";f.imgs.forEach(i=>URL.revokeObjectURL(i.url));f.imgs=[];
+    S.busy=null;S.view="note";S.noteId=note.id;S.noteTab="sheet";render();window.scrollTo(0,0);
+  }catch(e){S.busy=null;S.err=aiErr(e);render()}
+}
+async function moreQs(note){
+  if(!S.sample){toast("AI를 쓸 수 없는 화면이에요");return}
+  S.err="";S.busy={step:2,more:true};render();
+  try{
+    const types=note.types&&note.types.length?note.types:["mc","ox","short"];
+    const r=await ask(qPrompt(note,S.form.count,S.form.level,types,note.questions.map(q=>q.q).slice(-40)));
+    const qs=cleanQs(r.questions,types);
+    note.questions=[...note.questions,...qs];await saveNote(note);
+    S.busy=null;S.noteTab="quiz";render();toast(`${qs.length}문제 추가됐어요`);
+  }catch(e){S.busy=null;S.err=aiErr(e);render()}
+}
+
+/* ---------- render ---------- */
+function render(){
+  document.querySelectorAll("nav.bottom button").forEach(b=>b.classList.toggle("on",b.dataset.nav===(S.view==="note"?"list":S.view)));
+  const m=$("#main");
+  if(S.busy){m.innerHTML=busyView();return}
+  if(S.view==="new")m.innerHTML=newView();
+  else if(S.view==="list")m.innerHTML=listView();
+  else if(S.view==="wrong")m.innerHTML=wrongView();
+  else if(S.view==="note")m.innerHTML=noteView();
+  else if(S.view==="style")m.innerHTML=styleView();
+}
+function styleBox(st){
+  return `<div class="overview" style="margin-bottom:10px">${fmt(st.summary)}</div>
+  <dl class="terms"><dt>유형 비율</dt><dd>${fmt(st.typeRatio)}</dd><dt>선지·자료</dt><dd>${fmt(st.choiceStyle)}</dd><dt>난이도·함정</dt><dd>${fmt(st.difficulty)}</dd>${st.essay?`<dt>서술형</dt><dd>${fmt(st.essay)}</dd>`:""}</dl>
+  ${(st.patterns||[]).length?`<div class="box exam"><h3>📝 자주 나오는 발문</h3><ul class="pts">${st.patterns.map(p=>`<li>${fmt(p)}</li>`).join("")}</ul></div>`:""}
+  ${(st.tips||[]).length?`<div class="box" style="background:var(--accent-2)"><h3 style="color:var(--accent)">💡 대비 전략</h3><ul class="pts">${st.tips.map(p=>`<li>${fmt(p)}</li>`).join("")}</ul></div>`:""}`;
+}
+function styleView(){
+  const f=S.sform;const st=S.styles[f.subject];
+  return `<h2>🏫 우리 학교 출제 경향</h2>
+  <div class="muted" style="margin-bottom:12px">학교 시험지(기출)를 올리면 출제 스타일을 분석해 두고, 변형 문제를 그 스타일로 만들어요. 여러 번 올릴수록 정확해져요.</div>
+  <div class="chips" style="margin-bottom:14px">${SUBJECTS.map(s=>`<button class="chip ${f.subject===s?"on":""}" data-act="ssubj" data-v="${s}">${s}${S.styles[s]?" ✓":""}</button>`).join("")}</div>
+  ${st?`<div class="card"><h3>${esc(f.subject)} 경향 <span class="muted" style="font-weight:400">· 시험지 ${st.exams||1}번 분석 · ${new Date(st.updatedAt).toLocaleDateString("ko-KR")}</span></h3>${styleBox(st)}
+    <div style="margin-top:12px;text-align:right"><button class="btn danger sm" data-act="sdel">${S.delArm?"한 번 더 누르면 삭제":"경향 삭제"}</button></div></div>`
+   :`<div class="card muted">아직 ${esc(f.subject)} 시험지를 분석하지 않았어요.</div>`}
+  <div class="card">
+  <div class="label">${st?"시험지 더 추가해서 업데이트":"시험지 올리기"} (사진 최대 8장)</div>
+  ${S.sample&&!S.imagesOk?`<div class="muted" style="margin-bottom:8px">이 화면에선 사진 분석이 안 돼요. 텍스트로 넣어주세요.</div>`:""}
+  <div class="photos" style="margin-bottom:12px">${f.imgs.map((im,i)=>`<div class="ph"><img src="${im.url}" alt=""><button data-act="srmimg" data-i="${i}">✕</button></div>`).join("")}
+  ${f.imgs.length<8?`<button class="addph" data-act="saddimg"><b>＋</b>시험지</button>`:""}</div>
+  <textarea id="stxt" style="min-height:90px" placeholder="(선택) 시험지 문제를 텍스트로 붙여넣어도 돼요">${esc(f.text)}</textarea>
+  </div>
+  <button class="btn primary" data-act="sgo" ${S.sample?"":"disabled"}>🔍 출제 경향 분석하기</button>
+  ${S.err?`<div class="err">${esc(S.err)}</div>`:""}`;
+}
+function busyView(){
+  const s=S.busy.step;const c=n=>s>n?"done":s===n?"on":"";
+  return `<div class="card prog"><div class="spinner"></div>
+  <h2>${S.busy.style?"시험지 출제 경향 분석 중":s===1?"한판정리 만드는 중":"변형 문제 만드는 중"}</h2>
+  ${S.busy.more||S.busy.style?"":`<div class="steps"><span class="${c(1)}">① 한판정리</span><span class="${c(2)}">② 변형 문제</span></div>`}
+  <div class="muted" id="progN">자료 읽는 중…</div>
+  <div class="muted" style="margin-top:6px;font-size:13px">30초~1분 정도 걸려요</div>
+  <button class="btn line sm" style="margin-top:16px" data-act="cancel">취소</button></div>`;
+}
+function newView(){
+  const f=S.form;
+  return `<div class="card">
+  <div class="label">과목</div>
+  <div class="chips">${SUBJECTS.map(s=>`<button class="chip ${f.subject===s?"on":""}" data-act="subj" data-v="${s}">${s}</button>`).join("")}</div>
+  ${S.styles[f.subject]?`<div class="row" style="align-items:center;justify-content:space-between;background:var(--accent-2);border-radius:12px;padding:10px 12px;margin-top:12px">
+    <span style="font-size:14px">🏫 우리 학교 ${esc(f.subject)} 경향 반영</span>
+    <button class="chip ${f.useStyle?"on":""}" data-act="ustyle">${f.useStyle?"켜짐":"꺼짐"}</button></div>`
+   :`<button class="btn line sm" style="margin-top:12px;width:100%" data-act="gostyle" data-v="${f.subject}">🏫 학교 시험지로 ${esc(f.subject)} 출제 경향 맞추기 →</button>`}
+  <div class="label">공부할 내용 (텍스트)</div>
+  <textarea id="txt" placeholder="교과서·필기·프린트 내용을 붙여넣거나 적어주세요.">${esc(f.text)}</textarea>
+  <div class="label">사진 (최대 6장)</div>
+  ${S.sample&&!S.imagesOk?`<div class="muted" style="margin-bottom:8px">이 화면에선 사진 분석이 안 돼요. 텍스트로 넣어주세요.</div>`:""}
+  <div class="photos">${f.imgs.map((im,i)=>`<div class="ph"><img src="${im.url}" alt=""><button data-act="rmimg" data-i="${i}">✕</button></div>`).join("")}
+  ${f.imgs.length<6?`<button class="addph" data-act="addimg"><b>＋</b>사진 추가</button>`:""}</div>
+  </div>
+  <div class="card">
+  <div class="label">문제 수</div>
+  <div class="chips">${[5,8,12].map(n=>`<button class="chip ${f.count===n?"on":""}" data-act="cnt" data-v="${n}">${n}문제</button>`).join("")}</div>
+  <div class="label">난이도</div>
+  <div class="chips">${Object.entries(LEVELS).map(([k,v])=>`<button class="chip ${f.level===k?"on":""}" data-act="lvl" data-v="${k}">${v}</button>`).join("")}</div>
+  <div class="label">문제 유형</div>
+  <div class="chips">${Object.entries(TYPES).map(([k,v])=>`<button class="chip ${f.types.includes(k)?"on":""}" data-act="typ" data-v="${k}">${v}</button>`).join("")}</div>
+  </div>
+  <button class="btn primary" data-act="gen" ${S.sample?"":"disabled"}>✨ 한판정리 + 변형문제 만들기</button>
+  ${S.err?`<div class="err">${esc(S.err)}</div>`:""}`;
+}
+function listView(){
+  if(!S.notes.length)return `<div class="empty"><div class="big">📚</div>아직 만든 노트가 없어요.<br>‘새로 만들기’에서 첫 한판정리를 만들어 보세요.</div>`;
+  const subs=[...new Set(S.notes.map(n=>n.subject))];
+  const flt=S.listFilter&&subs.includes(S.listFilter)?S.listFilter:"";
+  const items=S.notes.filter(n=>!flt||n.subject===flt);
+  return `<h2>내 노트 <span class="muted">${S.notes.length}개</span></h2>
+  ${subs.length>1?`<div class="chips" style="margin-bottom:12px"><button class="chip ${!flt?"on":""}" data-act="lf" data-v="">전체</button>${subs.map(s=>`<button class="chip ${flt===s?"on":""}" data-act="lf" data-v="${esc(s)}">${esc(s)}</button>`).join("")}</div>`:""}
+  ${items.map(n=>`<button class="note-item" data-act="open" data-id="${n.id}">
+    <div class="t">${esc(n.title)}</div>
+    <div class="m"><span class="badge">${esc(n.subject)}</span>${(n.questions||[]).length}문제${(n.wrong||[]).length?` · <span style="color:var(--bad)">오답 ${(n.wrong||[]).length}</span>`:""} · ${new Date(n.createdAt).toLocaleDateString("ko-KR")}</div>
+  </button>`).join("")}`;
+}
+function sheetHTML(n){
+  const s=n.sheet||{};
+  return `<div class="card">
+  <div class="sheet-title">${esc(n.title)}</div>
+  <div class="sheet-sub">${esc(n.subject)} · 한판정리</div>
+  ${s.overview?`<div class="overview">${fmt(s.overview)}</div>`:""}
+  ${(s.sections||[]).map((x,i)=>`<div class="sec"><h3><i>${i+1}</i>${fmt(x.heading)}</h3><ul class="pts">${(x.points||[]).map(p=>`<li>${fmt(p)}</li>`).join("")}</ul></div>`).join("")}
+  ${(s.keyTerms||[]).length?`<div class="sec"><h3>📌 핵심 용어</h3><dl class="terms">${s.keyTerms.map(k=>`<dt>${fmt(k.term)}</dt><dd>${fmt(k.meaning)}</dd>`).join("")}</dl></div>`:""}
+  ${(s.examPoints||[]).length?`<div class="box exam"><h3>🎯 시험에 나온다</h3><ul class="pts">${s.examPoints.map(p=>`<li>${fmt(p)}</li>`).join("")}</ul></div>`:""}
+  ${(s.traps||[]).length?`<div class="box trap"><h3>⚠️ 헷갈리는 함정</h3><ul class="pts">${s.traps.map(p=>`<li>${fmt(p)}</li>`).join("")}</ul></div>`:""}
+  </div>
+  <div class="row"><button class="btn ghost sm" data-act="copy">📋 정리 복사</button><button class="btn ghost sm" data-act="tab" data-v="quiz">✍️ 변형문제 풀기 →</button></div>`;
+}
+function qHTML(q,i,ctx){
+  const a=S.answers[q.id];const done=a&&a.done;
+  let body="";
+  if(q.type==="mc"){
+    body=q.choices.map((c,ci)=>{let cl="";if(done){if(ci===q.answer)cl="ok";else if(ci===a.pick)cl="bad"}
+      return `<button class="ch ${cl}" data-act="pick" data-q="${q.id}" data-v="${ci}" data-ctx="${ctx}" ${done?"disabled":""}><span class="n">${ci+1}</span><span>${fmt(c)}</span></button>`}).join("");
+  }else if(q.type==="ox"){
+    body=`<div class="ox">${["O","X"].map(v=>{let cl="";if(done){if(v===q.answer)cl="ok";else if(v===a.pick)cl="bad"}
+      return `<button class="${cl}" data-act="pick" data-q="${q.id}" data-v="${v}" data-ctx="${ctx}" ${done?"disabled":""}>${v}</button>`}).join("")}</div>`;
+  }else{
+    body=`<div class="short">${done||a&&a.revealed?`<div class="muted" style="margin-bottom:6px">내 답: ${esc(a.text||"(빈칸)")}</div>`:q.type==="essay"?`<textarea id="in_${q.id}" placeholder="답안을 써보세요" style="min-height:90px;margin-bottom:8px"></textarea>`:`<input id="in_${q.id}" placeholder="답을 적어보세요" autocomplete="off">`}
+      ${a&&a.revealed&&!done?`<div class="exp" style="background:#f3f1ec"><div class="verdict">정답: ${esc(q.answer)}</div>${fmt(q.explanation)}</div>
+        <div class="row" style="margin-top:8px"><button class="btn ghost sm" data-act="self" data-q="${q.id}" data-v="1" data-ctx="${ctx}">⭕ 맞았어</button><button class="btn danger sm" data-act="self" data-q="${q.id}" data-v="0" data-ctx="${ctx}">❌ 틀렸어</button></div>`
+      :!done?`<button class="btn line sm" data-act="reveal" data-q="${q.id}">정답 확인</button>`:""}</div>`;
+  }
+  const exp=done?`<div class="exp ${a.ok?"ok":"bad"}"><div class="verdict">${a.ok?"⭕ 정답!":"❌ 오답"}${q.type==="short"?` · 정답: ${esc(q.answer)}`:""}</div>${fmt(q.explanation)}</div>`:"";
+  return `<div class="q"><div class="qhead"><span class="qnum">Q${i+1}</span><span class="qtype">${TYPES[q.type]}</span></div>
+  <div class="qtext">${fmt(q.q)}</div>${body}${exp}</div>`;
+}
+function quizHTML(n){
+  const qs=n.questions||[];
+  const wrong=new Set(n.wrong||[]);
+  const list=S.onlyWrong?qs.filter(q=>wrong.has(q.id)):qs;
+  const doneN=qs.filter(q=>S.answers[q.id]&&S.answers[q.id].done).length;
+  const okN=qs.filter(q=>S.answers[q.id]&&S.answers[q.id].ok).length;
+  return `<div class="score"><span>푼 문제 <b>${doneN}</b>/${qs.length} · 정답 <b style="color:var(--ok)">${okN}</b></span>
+    ${wrong.size?`<button class="chip ${S.onlyWrong?"on":""}" data-act="ow">틀린 것만 (${wrong.size})</button>`:""}</div>
+  ${list.length?list.map(q=>qHTML(q,qs.indexOf(q),"note")).join(""):`<div class="empty">${qs.length?"틀린 문제가 없어요 👍":"아직 문제가 없어요."}</div>`}
+  <div class="card"><div class="label">문제 더 만들기</div>
+  <div class="chips" style="margin-bottom:10px">${Object.entries(LEVELS).map(([k,v])=>`<button class="chip ${S.form.level===k?"on":""}" data-act="lvl" data-v="${k}">${v}</button>`).join("")}</div>
+  <div class="row"><button class="btn ghost" data-act="more" style="flex:1">➕ 새 변형문제 ${S.form.count}개</button>
+  ${doneN?`<button class="btn line" data-act="reset">🔄 다시 풀기</button>`:""}</div></div>`;
+}
+function noteView(){
+  const n=S.notes.find(x=>x.id===S.noteId);
+  if(!n){S.view="list";return listView()}
+  return `<button class="back" data-act="nav" data-v="list">← 내 노트</button>
+  <div class="seg"><button class="${S.noteTab==="sheet"?"on":""}" data-act="tab" data-v="sheet">📄 한판정리</button><button class="${S.noteTab==="quiz"?"on":""}" data-act="tab" data-v="quiz">✍️ 변형문제 ${(n.questions||[]).length}</button></div>
+  ${S.err?`<div class="err" style="margin:0 0 12px">${esc(S.err)}</div>`:""}
+  ${S.noteTab==="sheet"?sheetHTML(n):quizHTML(n)}
+  <div style="margin-top:20px;text-align:center"><button class="btn danger sm" data-act="del">${S.delArm?"정말 삭제할까요? 한 번 더 누르세요":"🗑 노트 삭제"}</button></div>`;
+}
+function wrongView(){
+  const items=[];S.notes.forEach(n=>(n.questions||[]).forEach(q=>{if((n.wrong||[]).includes(q.id))items.push({n,q})}));
+  if(!items.length)return `<div class="empty"><div class="big">🎉</div>오답이 없어요!<br>문제를 풀다 틀리면 여기에 모여요.</div>`;
+  return `<h2>오답노트 <span class="muted">${items.length}문제</span></h2>
+  <div class="muted" style="margin-bottom:12px">다시 풀어서 맞히면 오답노트에서 빠져요.</div>
+  ${items.map(({n,q},i)=>`<div class="from">${esc(n.subject)} · ${esc(n.title)}</div>${qHTML(q,i,"wrong")}`).join("")}`;
+}
+
+/* ---------- answering ---------- */
+function findQ(qid){for(const n of S.notes){const q=(n.questions||[]).find(x=>x.id===qid);if(q)return{n,q}}return{}}
+function record(qid,ok,pick,ctx){
+  const {n}=findQ(qid);if(!n)return;
+  S.answers[qid]={...(S.answers[qid]||{}),done:true,ok,pick};
+  const w=new Set(n.wrong||[]);const had=w.has(qid);
+  if(!ok)w.add(qid);else if(ctx==="wrong")w.delete(qid);
+  if(w.has(qid)!==had){n.wrong=[...w];saveNote(n);if(ctx==="wrong"&&ok)toast("오답노트에서 뺐어요 👍")}
+  render();
+}
+
+/* ---------- events ---------- */
+document.addEventListener("input",e=>{if(e.target.id==="txt")S.form.text=e.target.value;if(e.target.id==="stxt")S.sform.text=e.target.value});
+document.addEventListener("click",async e=>{
+  const nb=e.target.closest("[data-nav]");
+  if(nb){if(S.busy)return;S.view=nb.dataset.nav;S.err="";S.delArm=false;S.onlyWrong=false;if(S.view==="wrong")S.answers={};render();window.scrollTo(0,0);return}
+  const b=e.target.closest("[data-act]");if(!b)return;
+  const act=b.dataset.act,v=b.dataset.v,f=S.form;
+  if(act!=="del"&&act!=="sdel")S.delArm=false;
+  switch(act){
+    case"ssubj":S.sform.subject=v;S.err="";render();break;
+    case"saddimg":if(S.sample&&!S.imagesOk){toast("이 화면에선 사진 분석이 안 돼요");break}S.imgTarget="style";$("#fileIn").click();break;
+    case"srmimg":{const im=S.sform.imgs.splice(+b.dataset.i,1)[0];if(im)URL.revokeObjectURL(im.url);render();break}
+    case"sgo":analyzeStyle();break;
+    case"sdel":if(!S.delArm){S.delArm=true;render();break}delete S.styles[S.sform.subject];S.delArm=false;saveStyles();render();toast("삭제했어요");break;
+    case"ustyle":f.useStyle=!f.useStyle;render();break;
+    case"gostyle":S.sform.subject=v;S.view="style";S.err="";render();window.scrollTo(0,0);break;
+    case"subj":f.subject=v;render();break;
+    case"cnt":f.count=+v;render();break;
+    case"lvl":f.level=v;render();break;
+    case"typ":{const i=f.types.indexOf(v);if(i>=0){if(f.types.length>1)f.types.splice(i,1)}else f.types.push(v);render();break}
+    case"addimg":if(S.sample&&!S.imagesOk){toast("이 화면에선 사진 분석이 안 돼요");break}S.imgTarget="form";$("#fileIn").click();break;
+    case"rmimg":{const im=f.imgs.splice(+b.dataset.i,1)[0];if(im)URL.revokeObjectURL(im.url);render();break}
+    case"gen":generate();break;
+    case"cancel":if(S.busy&&S.busy.ctrl)S.busy.ctrl.abort();S.busy=null;render();break;
+    case"lf":S.listFilter=v;render();break;
+    case"open":S.view="note";S.noteId=b.dataset.id;S.noteTab="sheet";S.onlyWrong=false;S.err="";render();window.scrollTo(0,0);break;
+    case"nav":S.view=v;render();window.scrollTo(0,0);break;
+    case"tab":S.noteTab=v;S.err="";render();window.scrollTo(0,0);break;
+    case"ow":S.onlyWrong=!S.onlyWrong;if(S.onlyWrong){const n=S.notes.find(x=>x.id===S.noteId);(n.wrong||[]).forEach(id=>delete S.answers[id])}render();break;
+    case"reset":{const n=S.notes.find(x=>x.id===S.noteId);(n.questions||[]).forEach(q=>delete S.answers[q.id]);render();window.scrollTo(0,0);break}
+    case"more":{const n=S.notes.find(x=>x.id===S.noteId);if(n)moreQs(n);break}
+    case"del":if(!S.delArm){S.delArm=true;render();break}deleteNote(S.noteId);S.delArm=false;S.view="list";render();toast("삭제했어요");break;
+    case"pick":{const {q}=findQ(b.dataset.q);if(!q)break;const pick=q.type==="mc"?+v:v;record(q.id,pick===q.answer,pick,b.dataset.ctx);break}
+    case"reveal":{const inp=$("#in_"+b.dataset.q);S.answers[b.dataset.q]={revealed:true,text:inp?inp.value.trim():""};render();break}
+    case"self":record(b.dataset.q,v==="1",null,b.dataset.ctx);break;
+    case"copy":{const n=S.notes.find(x=>x.id===S.noteId);const s=n.sheet;
+      const t=[`[${n.subject}] ${n.title}`,s.overview,"",...(s.sections||[]).flatMap((x,i)=>[`${i+1}. ${x.heading}`,...(x.points||[]).map(p=>"  - "+p),""]),
+        (s.keyTerms||[]).length?"핵심 용어\n"+s.keyTerms.map(k=>`  - ${k.term}: ${k.meaning}`).join("\n")+"\n":"",
+        (s.examPoints||[]).length?"시험 포인트\n"+s.examPoints.map(p=>"  - "+p).join("\n")+"\n":"",
+        (s.traps||[]).length?"함정\n"+s.traps.map(p=>"  - "+p).join("\n"):""].join("\n").replace(/\*\*/g,"");
+      try{await navigator.clipboard.writeText(t);toast("복사했어요")}catch{toast("복사가 막혀 있어요")}break}
+  }
+});
+
+render();initStore();initAI();
+</script>
+</body>
+</html>
